@@ -47,6 +47,11 @@ SoilBinaryFile >> initializeStart [
 
 ]
 
+{ #category : #testing }
+SoilBinaryFile >> isOpen [
+	^stream isOpen
+]
+
 { #category : #locking }
 SoilBinaryFile >> lockAppendingFor: lockContext [
 	^ stream lockAppendingFor: lockContext 
@@ -90,4 +95,9 @@ SoilBinaryFile >> stream [
 { #category : #accessing }
 SoilBinaryFile >> stream: anObject [
 	stream := anObject
+]
+
+{ #category : #writing }
+SoilBinaryFile >> writeContentsToDisk [
+	stream fileStream fdatasync
 ]
