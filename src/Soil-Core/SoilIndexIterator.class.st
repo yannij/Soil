@@ -91,6 +91,13 @@ SoilIndexIterator >> basicNextAssociation [
 	Error signal: 'shouldnt happen'
 ]
 
+{ #category : #removing }
+SoilIndexIterator >> basicRemoveKey: key [ 
+	^ self 
+		basicAt: key 
+		put: SoilObjectId removed
+]
+
 { #category : #private }
 SoilIndexIterator >> convertValue: anObject [ 
 	anObject ifNil: [ ^ nil ].
@@ -209,10 +216,12 @@ SoilIndexIterator >> lastPage [
 
 { #category : #accessing }
 SoilIndexIterator >> next [
-	| nextAssociation restoredItem |
+	| nextAssociation |
 	nextAssociation := self basicNextAssociation ifNil: [ ^nil ].
-	restoredItem := self restoreItem: nextAssociation.
-	^ self convertValue: (restoredItem value ifNil: [ self next]) 
+	^ (self restoreItem: nextAssociation)
+		ifNotNil: [ :restoredItem | self convertValue: restoredItem value ]
+		ifNil: [ self next ]
+	
 ]
 
 { #category : #accessing }
