@@ -232,7 +232,7 @@ SoilTransaction >> buildWriteVersion [
 	locks add: (soil lockDatabaseVersionFor: self).
 	"Now the version is locked. We can read it again to have the real version and
 	increment"
-	^ soil databaseVersion + 1 
+	^ soil control databaseVersion + 1 
 ]
 
 { #category : #accessing }
@@ -472,7 +472,9 @@ SoilTransaction >> objectAt: anObjectId ifAbsent: aBlock [
 
 { #category : #api }
 SoilTransaction >> objectIdOf: anObject [ 
-	^ (objectMap at: anObject) objectId.
+	^ (anObject class = SoilObjectProxy)
+		ifTrue: [ anObject objectId ]
+		ifFalse: [ (objectMap at: anObject) objectId ].
 	
 ]
 
